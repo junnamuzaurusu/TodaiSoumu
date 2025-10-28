@@ -27,7 +27,7 @@ def get_channels():
                 print("   プライベートチャンネルにアクセスするにはボットトークンが必要です")
         else:
             print(f"❌ 認証テストエラー: {auth_response['error']}")
-            return
+            return []
         
         print("\n" + "="*50)
         
@@ -48,6 +48,7 @@ def get_channels():
                 print("   - channels:read (パブリックチャンネルを読み取り)")
                 print("\n🔧 Slackアプリの設定でこれらのスコープを追加してください:")
                 print("   https://api.slack.com/apps でアプリを選択 → OAuth & Permissions → Scopes")
+            return []
             
     except SlackApiError as e:
         print(f"Slack APIエラー: {e.response['error']}")
@@ -57,8 +58,10 @@ def get_channels():
             print("無効なトークンです。トークンが正しいか確認してください。")
         elif e.response['error'] == 'missing_scope':
             print("必要なスコープが不足しています。Slackアプリの設定を確認してください。")
+        return []
     except Exception as e:
         print(f"予期しないエラーが発生しました: {e}")
+        return []
 
 def invite_user_to_channel(channels, user_id):
     load_dotenv()

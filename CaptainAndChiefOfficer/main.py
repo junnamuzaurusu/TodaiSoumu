@@ -15,9 +15,8 @@ def main():
         return
     invited_user_id = sys.argv[1]
     channels = get_channels()
-    for channel in channels:
-        print(channel['name'])
-    #invite_user_to_channel(channels, invited_user_id)
+    channels = sorted(channels, key=lambda x: x['name'])
+    invite_user_to_channel(channels, invited_user_id)
 
 if __name__ == "__main__":
     main()
