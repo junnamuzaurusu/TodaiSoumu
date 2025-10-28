@@ -36,7 +36,7 @@ pip install -r requirement.txt
 touch .env
 
 # .envファイルに以下を記述
-# トークンの値を知りたいは園田へ連絡ください
+# トークンの値を知りたいは私に連絡ください
 CAPTAIN_CHIEF_OFFICER_TOKEN="<トークンの値>"
 ```
 
