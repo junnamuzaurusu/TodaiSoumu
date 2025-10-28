@@ -8,7 +8,7 @@
 ### 1. リポジトリのクローン
 
 ```bash
-git clone <repository-url>
+git clone git@github.com:junnamuzaurusu/TodaiSoumu.git
 cd sports
 ```
 
