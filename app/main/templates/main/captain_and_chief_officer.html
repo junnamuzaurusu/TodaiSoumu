@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主将主務Slack一括招待</title>
+</head>
+<body>
+    <h1>主将主務Slack一括招待</h1>
+    <p>ログインユーザー: {{ user.username }}</p>
+    
+    <nav>
+        {% if messages %}
+            <div style="margin: 10px 0;">
+                {% for message in messages %}
+                    <div style="color: {% if message.tags == 'error' %}red{% elif message.tags == 'success' %}green{% elif message.tags == 'warning' %}orange{% else %}blue{% endif %}; padding: 8px; margin: 5px 0; border-left: 3px solid {% if message.tags == 'error' %}red{% elif message.tags == 'success' %}green{% elif message.tags == 'warning' %}orange{% else %}blue{% endif %}; background-color: {% if message.tags == 'error' %}#ffe6e6{% elif message.tags == 'success' %}#e6ffe6{% elif message.tags == 'warning' %}#fff3e6{% else %}#e6f3ff{% endif %};">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <form method="post" action="{% url 'main:captain-and-chief-officer' %}">
+            {% csrf_token %}
+            <table style="border: 1px solid #000; border-collapse: collapse;">
+                <tr> 
+                    <td style="text-align: center; padding: 10px;">
+                        <label for="user_id">ユーザーID:</label>
+                        <input type="text" id="user_id" name="user_id" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center; padding: 10px;">
+                        <button type="submit">
+                            主将主務Slackに招待する
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <div style="padding: 10px;">
+            <a href="https://intercom.help/yoom/ja/articles/5480063-slack%E3%81%AE%E3%83%A1%E3%83%B3%E3%83%90%E3%83%BCid%E3%81%AE%E7%A2%BA%E8%AA%8D%E6%96%B9%E6%B3%95" target="_blank">ユーザーIDの取得方法がわからない場合はこちら</a>
+        </div>
+
+        <div style="padding: 10px;">
+            <button onclick="window.location.href='{% url 'main:home' %}'">
+                ホームに戻る
+            </button>
+        </div>
+    </nav>
+</body>
+</html>
+

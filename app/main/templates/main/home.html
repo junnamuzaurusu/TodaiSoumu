@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ホーム</title>
+</head>
+<body>
+    <h1>ホーム</h1>
+    <p>ようこそ、{{ user.username }}さん！</p>
+    
+    <nav>
+        <ul>
+            <li><a href="{% url 'main:captain-and-chief-officer' %}">主将主務Slack一括招待</a></li>
+        <li><a href="{% url 'main:accounting' %}">会計Slack一括招待</a></li>
+        </ul>
+    </nav>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div style="color: {% if message.tags == 'error' %}red{% elif message.tags == 'success' %}green{% else %}blue{% endif %};">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>
+

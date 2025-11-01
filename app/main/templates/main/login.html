@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <h1>ログイン</h1>
+    {% if messages %}
+        {% for message in messages %}
+            <div style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %};">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <form method="post">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td>{{ form.username.label_tag }}</td>
+                <td>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                        <div style="color: red;">{{ form.username.errors }}</div>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ form.password.label_tag }}</td>
+                <td>
+                    {{ form.password }}
+                    {% if form.password.errors %}
+                        <div style="color: red;">{{ form.password.errors }}</div>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button type="submit">ログイン</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>
+
