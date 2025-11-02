@@ -41,8 +41,7 @@ def get_channels(messages_list=None, type=None):
         else:
             msg = f"❌ 認証テストエラー: {auth_response['error']}"
             return None, messages_list
-        
-        messages_list.append("=" * 50)
+    
         
         # チャンネル一覧を取得
         messages_list.append("チャンネル一覧を取得中...")
@@ -99,7 +98,6 @@ def invite_user_to_channel(channels, user_id, messages_list=None, type=None):
     
     client = WebClient(token=captain_chief_officer_token)
 
-    messages_list.append("=" * 50)
     messages_list.append("ユーザーをチャンネルに招待中...")
 
     for channel in channels:

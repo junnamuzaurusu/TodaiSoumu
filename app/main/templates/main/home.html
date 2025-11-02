@@ -7,7 +7,8 @@
 </head>
 <body>
     <h1>ホーム</h1>
-    <p>ようこそ、{{ user.username }}さん！</p>
+    <p>ようこそ、{{ username }}さん！</p>
+    <p><a href="{% url 'main:logout' %}">ログアウト</a></p>
     
     <nav>
         <ul>

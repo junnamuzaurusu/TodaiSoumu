@@ -1,19 +1,32 @@
+import os
+from functools import wraps
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login as auth_login
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods
+from dotenv import load_dotenv
+from django.conf import settings
 
 from .forms import LoginForm
 
 from .utils import invite_user_to_channel
 from .utils import get_channels
 
+
+def login_required_custom(view_func):
+    """簡易認証用のlogin_requiredデコレータ（.envベース）"""
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        if not request.session.get('is_logged_in', False):
+            return redirect('main:login')
+        return view_func(request, *args, **kwargs)
+    return wrapper
+
+
 @require_http_methods(["GET", "POST"])
 def login_view(request):
-    """ログインビュー"""
+    """ログインビュー（.envベースの簡易認証）"""
     # 既にログインしている場合はhomeにリダイレクト
-    if request.user.is_authenticated:
+    if request.session.get('is_logged_in', False):
         return redirect('main:home')
     
     if request.method == 'POST':
@@ -22,13 +35,27 @@ def login_view(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             
-            # データベースでユーザー認証
-            user = authenticate(request, username=username, password=password)
+            # .envファイルから認証情報を読み込む
+            env_path = settings.BASE_DIR.parent / '.env'
             
-            if user is not None:
-                # ログイン成功
-                auth_login(request, user)
-                messages.success(request, f'ようこそ、{user.username}さん！')
+            # .envファイルの存在確認とデバッグ情報
+            if not env_path.exists():
+                messages.error(request, f'.envファイルが見つかりません。パス: {env_path}')
+                form = LoginForm()
+                return render(request, 'main/login.html', {'form': form})
+            
+            result = load_dotenv(env_path, override=True)
+            
+            # USER_NAME と USERNAME の両方を確認
+            env_username = os.getenv('USERNAME') or os.getenv('USER_NAME')
+            env_password = os.getenv('PASSWORD')
+            
+            # .envファイルの認証情報と照合
+            if username == env_username and password == env_password:
+                # ログイン成功 - セッションに保存
+                request.session['is_logged_in'] = True
+                request.session['username'] = username
+                messages.success(request, f'ようこそ、{username}さん！')
                 return redirect('main:home')
             else:
                 # ログイン失敗
@@ -39,15 +66,23 @@ def login_view(request):
     return render(request, 'main/login.html', {'form': form})
 
 
-@login_required
+def logout_view(request):
+    """ログアウトビュー"""
+    request.session.flush()
+    messages.success(request, 'ログアウトしました。')
+    return redirect('main:login')
+
+
+@login_required_custom
 def home(request):
     """ホームビュー"""
+    username = request.session.get('username', 'ゲスト')
     return render(request, 'main/home.html', {
-        'user': request.user
+        'username': username
     })
 
 
-@login_required
+@login_required_custom
 def captain_and_chief_officer(request):
     """主将主務ビュー"""
     if request.method == 'POST':
@@ -92,13 +127,15 @@ def captain_and_chief_officer(request):
         
         return redirect('main:captain-and-chief-officer')
     else:
+        username = request.session.get('username', 'ゲスト')
         return render(request, 'main/captain_and_chief_officer.html', {
-            'user': request.user
+            'username': username
         })  
 
-@login_required
+@login_required_custom
 def accounting(request):
     """会計ビュー"""
+    username = request.session.get('username', 'ゲスト')
     return render(request, 'main/accounting.html', {
-        'user': request.user
+        'username': username
     })
