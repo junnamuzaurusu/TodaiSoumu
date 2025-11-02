@@ -11,3 +11,7 @@ __pycache__/
 *.pyz
 
 slack_api/
+
+*.log
+db-volumes/
+db.sqlite3

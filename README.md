@@ -55,11 +55,7 @@ python main.py <ユーザーID>
 2. 「その他」→「メンバーIDをコピー」
 3. または、[こちらのガイド](https://intercom.help/yoom/ja/articles/5480063-slack%E3%81%AE%E3%83%A1%E3%83%B3%E3%83%90%E3%83%BCid%E3%81%AE%E7%A2%BA%E8%AA%8D%E6%96%B9%E6%B3%95)を参考
 
-### 実行例
 
-```bash
-python main.py U09NE9GQGQP
-```
 
 
 
