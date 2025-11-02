@@ -3,3 +3,4 @@ Django==5.2.7
 python-dotenv==1.2.1
 slack_sdk==3.37.0
 sqlparse==0.5.3
+gunicorn==21.2.0
