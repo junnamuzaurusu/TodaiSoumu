@@ -8,10 +8,12 @@ def get_channels(messages_list=None, type=None):
     if messages_list is None:
         messages_list = []
     
-    # プロジェクトルートの.envファイルを読み込む
+    # プロジェクトルートの.envファイルを読み込む（存在する場合のみ）
+    # Render.comなどでは環境変数が直接設定されるため、.envファイルはオプショナル
     from django.conf import settings
     env_path = settings.BASE_DIR.parent / '.env'
-    load_dotenv(env_path)
+    if env_path.exists():
+        load_dotenv(env_path)
     
     # 環境変数からトークンを取得
     if type == 'captain_chief_officer':
@@ -20,7 +22,7 @@ def get_channels(messages_list=None, type=None):
         accounting_token = os.getenv("ACCOUNTING_TOKEN")
     
     if not captain_chief_officer_token:
-        messages_list.append("❌ トークンが.envファイルに設定されていません。")
+        messages_list.append("❌ トークンが環境変数に設定されていません。")
         return None, messages_list
     
     # Slackクライアントを初期化
@@ -81,10 +83,12 @@ def invite_user_to_channel(channels, user_id, messages_list=None, type=None):
         messages_list.append("❌ チャンネルリストが取得できませんでした。")
         return messages_list
     
-    # プロジェクトルートの.envファイルを読み込む
+    # プロジェクトルートの.envファイルを読み込む（存在する場合のみ）
+    # Render.comなどでは環境変数が直接設定されるため、.envファイルはオプショナル
     from django.conf import settings
     env_path = settings.BASE_DIR.parent / '.env'
-    load_dotenv(env_path)
+    if env_path.exists():
+        load_dotenv(env_path)
     
     # 環境変数からトークンを取得
     if type == 'captain_chief_officer':
@@ -93,7 +97,7 @@ def invite_user_to_channel(channels, user_id, messages_list=None, type=None):
         accounting_token = os.getenv("ACCOUNTING_TOKEN")
     
     if not captain_chief_officer_token:
-        messages_list.append("❌ トークンが.envファイルに設定されていません。")
+        messages_list.append("❌ トークンが環境変数に設定されていません。")
         return messages_list
     
     client = WebClient(token=captain_chief_officer_token)

@@ -35,16 +35,11 @@ def login_view(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             
-            # .envファイルから認証情報を読み込む
+            # .envファイルから認証情報を読み込む（存在する場合のみ）
+            # Render.comなどでは環境変数が直接設定されるため、.envファイルはオプショナル
             env_path = settings.BASE_DIR.parent / '.env'
-            
-            # .envファイルの存在確認とデバッグ情報
-            if not env_path.exists():
-                messages.error(request, f'.envファイルが見つかりません。パス: {env_path}')
-                form = LoginForm()
-                return render(request, 'main/login.html', {'form': form})
-            
-            result = load_dotenv(env_path, override=True)
+            if env_path.exists():
+                load_dotenv(env_path, override=True)
             
             # USER_NAME と USERNAME の両方を確認
             env_username = os.getenv('USERNAME') or os.getenv('USER_NAME')
